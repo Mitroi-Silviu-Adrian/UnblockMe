@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New LicensePlates{% endblock %}
+
+{% block body %}
+    <h1>Create new LicensePlates</h1>
+
+    {{ include('license_plates/_form.html.twig') }}
+
+    <a href="{{ path('license_plates_index') }}">back to list</a>
+{% endblock %}
