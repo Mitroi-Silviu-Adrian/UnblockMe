@@ -14,10 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class LicensePlatesController extends AbstractController
 {
     #[Route('/', name: 'license_plates_index', methods: ['GET'])]
-    public function index(LicensePlatesRepository $licensePlatesRepository): Response
+    public function index(): Response
     {
+        $licensePlatesRepository = $this->getUser()->getLicensePlates();
+
         return $this->render('license_plates/index.html.twig', [
-            'license_plates' => $licensePlatesRepository->findAll(),
+            'license_plates' => $licensePlatesRepository,
         ]);
     }
 
@@ -36,6 +38,7 @@ class LicensePlatesController extends AbstractController
             $entityManager->persist($licensePlate);
             $entityManager->flush();
 
+            $licensePlatesRepository = $this->getUser()->getLicensePlates();
             return $this->redirectToRoute('license_plates_index');
         }
 

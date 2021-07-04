@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}Hello {{ current_user }}!{% endblock %}
 
 {% block body %}
 <style>
@@ -9,12 +9,10 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello {{ current_user }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/Lavan/UnblockMe/src/Controller/UserController.php'|file_link(0) }}">src/Controller/UserController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/Lavan/UnblockMe/templates/home/index.html.twig'|file_link(0) }}">templates/user/index.html.twig</a></code></li>
-    </ul>
+    <a href="{{ path('showMyCars') }}">My Cars</a>
+
+
 </div>
 {% endblock %}

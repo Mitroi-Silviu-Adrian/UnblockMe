@@ -21,7 +21,7 @@ class AuthentificatorController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
          if ($this->getUser()) {
-             return $this->redirectToRoute('license_plates_index');
+             return $this->redirectToRoute('home');
          }
 
         // get the login error if there is one
@@ -58,10 +58,10 @@ class AuthentificatorController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('home/new.html.twig', [
+        return $this->render('user/new.html.twig', [
             'license_plate' => $user,
             'form' => $form->createView(),
         ]);
