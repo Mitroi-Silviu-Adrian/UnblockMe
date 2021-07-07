@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choose Car{% endblock %}
+
+{% block body %}
+<h1>What car did you park?</h1>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>License Plate</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for license_plate in license_plates %}
+  <tr>
+
+    <td>{{ license_plate.licensePlate }}</td>
+    <td>
+      <a href="{{ path('chooseLP',{'type': type,'id': license_plate.id}) }}">Choose</a>
+    </td>
+  </tr>
+  {% else %}
+  <tr>
+    <td colspan="3">no records found</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<a href="{{ path('license_plates_new') }}">Add new car</a>
+<br>
+<a href="{{ path('home') }}">Back to Home</a>
+{% endblock %}

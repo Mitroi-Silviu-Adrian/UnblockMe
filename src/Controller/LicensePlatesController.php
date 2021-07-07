@@ -37,8 +37,7 @@ class LicensePlatesController extends AbstractController
 
             $entityManager->persist($licensePlate);
             $entityManager->flush();
-
-            $licensePlatesRepository = $this->getUser()->getLicensePlates();
+            
             return $this->redirectToRoute('license_plates_index');
         }
 
@@ -51,6 +50,7 @@ class LicensePlatesController extends AbstractController
     #[Route('/{id}', name: 'license_plates_show', methods: ['GET'])]
     public function show(LicensePlates $licensePlate): Response
     {
+
         return $this->render('license_plates/show.html.twig', [
             'license_plate' => $licensePlate,
         ]);
