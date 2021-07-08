@@ -18,7 +18,7 @@
 
     <td>{{ license_plate.licensePlate }}</td>
     <td>
-      <a href="{{ path('chooseLP',{'type': type,'id': license_plate.id}) }}">Choose</a>
+      <a href="{{ path('chooseLP',{'type': type,'id': license_plate.id, 'activityRepository': activityRepository}) }}">Choose</a>
     </td>
   </tr>
   {% else %}
