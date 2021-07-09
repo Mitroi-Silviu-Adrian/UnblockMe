@@ -9,6 +9,8 @@ use App\Form\UserFormType as UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -47,23 +49,25 @@ class AuthentificatorController extends AbstractController
 
 
     #[Route('/register', name: 'register', methods: ['GET', 'POST'])]
-    public function register(Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    public function register(Request $request,
+                             UserPasswordHasherInterface $passwordHasher,
+                             MailerController $mail,
+                             MailerInterface $mailer): Response
     {
         $user = new User();
+        $password = substr(sha1(time()),0,rand(8,12));
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-
-
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $user->setPassword($passwordHasher->hashPassword($user,$user->getPassword()));
-
+            $user->setPassword($passwordHasher->hashPassword($user,$password));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_login');
+            return $mail->sendEmail($mailer,$user->getEmail(),$password);
         }
 
         return $this->render('user/new.html.twig', [
