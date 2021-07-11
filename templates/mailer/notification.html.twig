@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notification{% endblock %}
+
+{% block body %}
+
+    <p>
+        The user {{ from }} has sent you the following message:
+        <br>
+        {{ text }}
+    </p>
+
+{% endblock %}

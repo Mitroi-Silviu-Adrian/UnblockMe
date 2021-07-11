@@ -4,24 +4,29 @@ namespace App\Form;
 
 use App\Entity\Activity;
 use App\Entity\LicensePlates;
+use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityRepository;
+
+use SebastianBergmann\CodeCoverage\Report\Text;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 
-class BlockerType extends AbstractType
+class BlockeeType extends AbstractType
 {
-    private Security $security;
+    private $security;
 
     public function __construct(Security $security)
     {
         $this->security = $security;
     }
-
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -45,11 +50,11 @@ class BlockerType extends AbstractType
 
             'choices' => $plainLPs,
             'choice_label' => function($choice,$key,$value){
-                return $value;
+            return $value;
             },
             'mapped' => false,
-
         ];
+
         $noLPs = count($plainLPs);
         $submitOptions = array();
         if($noLPs > 1)
@@ -65,9 +70,9 @@ class BlockerType extends AbstractType
         }
 
         $builder
-            ->add('blocker',ChoiceType::class,$formOptions)
-            ->add('blockee')
-            ->add('Report', SubmitType::class,$submitOptions)
+            ->add('blocker')
+            ->add('blockee',ChoiceType::class,$formOptions)
+            ->add('Report', SubmitType::class)
         ;
 
     }

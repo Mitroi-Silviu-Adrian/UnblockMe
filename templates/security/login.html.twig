@@ -35,12 +35,18 @@
         </div>
     #}
 
+    <br>
     <button class="btn btn-lg btn-primary" type="submit">
         Sign in
     </button>
 
-
-    <a href="{{ path('register') }}">Register</a>
-
+    <button class="btn btn-lg btn-primary" type="submit" formaction="{{ path('register') }}">
+        Register
+    </button>
 </form>
+
+
+
+
+
 {% endblock %}

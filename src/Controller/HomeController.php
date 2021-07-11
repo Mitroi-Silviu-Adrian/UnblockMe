@@ -15,9 +15,8 @@ class HomeController extends AbstractController
     #[Route('/home', name: 'home')]
     public function index(): Response
     {
-
         $user = $this->getUser();
-
+        //$this->addFlash('notice', "Welcome back!");
         return $this->render('home/index.html.twig', [
             'current_user' => $user->getUserIdentifier(),
         ]);

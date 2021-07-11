@@ -19,6 +19,20 @@ class LicensePlatesRepository extends ServiceEntityRepository
         parent::__construct($registry, LicensePlates::class);
     }
 
+
+    /**
+     * @return LicensePlates|null Returns Activity object
+     */
+    public function findByLicensePlate(string $licensePlate): ?LicensePlates
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.license_plate = :val')
+            ->setParameter('val', $licensePlate)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
     // /**
     //  * @return LicensePlates[] Returns an array of LicensePlates objects
     //  */

@@ -28,7 +28,11 @@ class AuthentificatorController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
          if ($this->getUser()) {
-             return $this->redirectToRoute('home');
+
+             $this->addFlash('notice', "Welcome back!");
+             return $this->render('home/index.html.twig', [
+                 'current_user' => $this->getUser()->getUserIdentifier(),
+             ]);
          }
 
         // get the login error if there is one

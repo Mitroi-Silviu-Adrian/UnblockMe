@@ -33,12 +33,28 @@ class LicensePlatesController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
 
-            $licensePlate->setUserId($this->getUser());
+            $auxLP =$this->getDoctrine()
+                    ->getRepository(LicensePlates::class)
+                    ->findByLicensePlate($licensePlate->getLicensePlate());
 
-            $entityManager->persist($licensePlate);
-            $entityManager->flush();
-            
-            return $this->redirectToRoute('license_plates_index');
+            if($auxLP)
+            {
+                $auxLP->setUserId($this->getUser());
+                $this->addFlash('notice','Your licence plate is involved in an activity!');
+                $this->addFlash('notice','Please check activity section!');
+                $entityManager->flush();
+            }
+            else
+            {
+                $licensePlate->setUserId($this->getUser());
+                $entityManager->persist($licensePlate);
+                $entityManager->flush();
+
+                $this->addFlash('notice','Licence Plate registered!');
+
+                //return $this->redirectToRoute('license_plates_index');
+            }
+
         }
 
         return $this->render('license_plates/new.html.twig', [

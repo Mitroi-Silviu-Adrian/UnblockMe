@@ -25,6 +25,7 @@
                 <td>{{ activity.blocker }}</td>
                 <td>{{ activity.blockee }}</td>
                 <td><a href="{{ path('deleteActivity', {'status': activity.status}) }}">Remove</a></td>
+                <td><a href="{{ path('contact', {'status': activity.status}) }}">Contact</a></td>
             </tr>
             {% endfor %}
 
@@ -41,8 +42,8 @@
 
     What do you report?:
     <ul>
-        <li><a href="{{ path('activityType', {'type': 'blockee', 'activityRepository': activityRepository})}}">I was blocked</a></li>
-        <li><a href="{{ path('activityType', {'type': 'blocker', 'activityRepository': activityRepository})}}">I blocked </a></li>
+        <li><a href="{{ path('reportActivity', {'type': 'blockee'})}}">I was blocked</a></li>
+        <li><a href="{{ path('reportActivity', {'type': 'blocker'})}}">I blocked </a></li>
     </ul>
 </div>
 

@@ -7,7 +7,7 @@ use App\Entity\Activity;
 use App\Repository\ActivityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class ActivitiesService
+class ActivityService
 {
     /**
      * @var ActivityRepository
