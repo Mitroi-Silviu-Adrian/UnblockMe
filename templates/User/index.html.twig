@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ current_user }}!{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block body %}
 <style>
@@ -9,13 +9,12 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ current_user }}! ✅</h1>
+    <h1>Email: {{ email }} ✅</h1>
 
-    <a href="{{ path('showMyCars') }}">My Cars</a>
+    <a href="{{ path('changePassword') }}">Change password</a>
     <br>
-    <a href="{{ path('activity') }}">Activities</a>
+    <a href="{{ path('home') }}">Back to home</a>
     <br>
-    <a href="{{ path('myProfile') }}">My Profile</a>
 
 </div>
 

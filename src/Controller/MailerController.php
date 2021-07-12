@@ -38,7 +38,7 @@ class MailerController extends AbstractController
             //->priority(Email::PRIORITY_HIGH)
             ->subject('Welcome to UnBlockMe')
             ->text($password)
-            ->html('<p>Thank you for registration!</p>');
+            ->html("<p>Thank you for registration! Your password is $password</p>");
 
         $mailer->send($email);
 
