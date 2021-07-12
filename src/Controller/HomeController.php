@@ -44,6 +44,43 @@ class HomeController extends AbstractController
         ]);
     }
 
+    private function checkPasswordContent(string $password): bool
+    {
+        $firstDigit = '0';
+        $lastDigit = '9';
+        $digitFound = false;
+
+        for($digit = $firstDigit; $digit<= $lastDigit; $digit++)
+            if (strchr($password, $digit) != null) {
+                $digitFound = true;
+                break;
+            }
+
+        $firstLWletter = 'a';
+        $lastLWletter = 'z';
+
+        $lwLetter = false;
+        for($letter = $firstLWletter; $letter<= $lastLWletter; $letter++)
+            if(strchr($password,$letter))
+            {
+                $lwLetter = true;
+                break;
+            }
+
+        $firstUPletter = 'A';
+        $lastUPletter = 'Z';
+
+        $UPLetter = false;
+        for($letter = $firstUPletter; $letter<= $lastUPletter; $letter++)
+            if(strchr($password,$letter))
+            {
+                $UPLetter = true;
+                break;
+            }
+
+        return $digitFound && $UPLetter && $lwLetter;
+    }
+
     #[Route('/changePassword', name: 'changePassword',  methods: ['GET', 'POST'])]
     public function changePassword(Request $request,
                                    UserPasswordHasherInterface $passwordHasher,
@@ -58,7 +95,7 @@ class HomeController extends AbstractController
             ])
             ->add('NewPassword',PasswordType::class,[
                 'invalid_message' => 'The password doesn\'t respect the constrains',
-                'help' => 'The password must have at least 8 characters in length',
+                'help' => 'The password must have at least 8 characters in length,at least a lowercase and uppercase letter, and a digit',
             ])
             ->add('RepeatPassword',PasswordType::class)
             ->add('Save',SubmitType::class)
@@ -79,7 +116,8 @@ class HomeController extends AbstractController
                 count_chars($newPassword)>=8 &&
                 count_chars($newPasswordAgain)>=8 &&
                 $newPassword != $oldPassword &&
-                $newPassword == $newPasswordAgain
+                $newPassword == $newPasswordAgain &&
+                $this->checkPasswordContent($newPassword)
             )
             {
                 $user->setPassword($passwordHasher->hashPassword($user,$newPassword));
@@ -89,6 +127,8 @@ class HomeController extends AbstractController
 
                 return $mail->sendEmail($mailer,$user->getEmail(),$newPassword);
             }
+            else
+            $this->addFlash("notice", "Either the old password is incorrect, or the format of the new password isn't respected");
 
             return $this->render('user/newPassword.html.twig',[
                 'form'=>$passwordForm->createView(),

@@ -23,6 +23,22 @@ class LicensePlatesController extends AbstractController
         ]);
     }
 
+    static function formatLP(string $plainLP): string
+    {
+        $plainLP = strtoupper($plainLP);
+        $plainLP = strtr($plainLP,' ','');
+
+        $ignoreChars = array(' ','*','-','_','*');
+        foreach ($ignoreChars as $char) {
+            $pos = strpos($plainLP, $char);
+            while ($pos) {
+                $plainLP = substr($plainLP, 0, $pos) . substr($plainLP, $pos + 1);
+                $pos = strpos($plainLP, $char);
+            }
+        }
+        return $plainLP;
+    }
+
     #[Route('/new', name: 'license_plates_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
@@ -31,11 +47,15 @@ class LicensePlatesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $entityManager = $this->getDoctrine()->getManager();
+
+            $plainLP = $licensePlate->getLicensePlate();
+            $plainLP = $this->formatLP($plainLP);
 
             $auxLP =$this->getDoctrine()
                     ->getRepository(LicensePlates::class)
-                    ->findByLicensePlate($licensePlate->getLicensePlate());
+                    ->findByLicensePlate($plainLP);
 
             if($auxLP)
             {
@@ -47,10 +67,12 @@ class LicensePlatesController extends AbstractController
             else
             {
                 $licensePlate->setUserId($this->getUser());
+                $licensePlate->setLicensePlate($plainLP);
+
                 $entityManager->persist($licensePlate);
                 $entityManager->flush();
 
-                $this->addFlash('notice','Licence Plate registered!');
+                $this->addFlash('notice',"Licence Plate $plainLP registered!");
 
                 //return $this->redirectToRoute('license_plates_index');
             }

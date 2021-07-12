@@ -69,6 +69,9 @@ class ActivityController extends AbstractController
             $activity->setBlockee($form->get('blockee')->getData());
             $activity->setBlocker($form->get('blocker')->getData());
 
+            $activity->setBlocker(LicensePlatesController::formatLP($activity->getBlocker()));
+            $activity->setBlockee(LicensePlatesController::formatLP($activity->getBlockee()));
+
             //var_dump($activity);die;
 
             $entityManager = $this->getDoctrine()->getManager();
