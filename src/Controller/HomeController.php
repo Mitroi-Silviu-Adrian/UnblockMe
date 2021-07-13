@@ -24,24 +24,36 @@ class HomeController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        //$this->addFlash('notice', "Welcome back!");
-        return $this->render('home/index.html.twig', [
-            'current_user' => $user->getUserIdentifier(),
-        ]);
+
+        if($user) {
+            //$this->addFlash('notice', "Welcome back!");
+            return $this->render('home/index.html.twig', [
+                'current_user' => $user->getUserIdentifier(),
+            ]);
+        }
+
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/myCars', name: 'showMyCars', methods: ['GET'])]
     public function showMyCars(): Response
     {
-        return $this->redirectToRoute('license_plates_index');
+        if($this->getUser())
+            return $this->redirectToRoute('license_plates_index');
+
+        return $this->redirectToRoute("app_login");
     }
 
     #[Route('/myProfile', name: 'myProfile', methods: ['GET'])]
     public function showMyProfile(): Response
     {
-        return $this->render('User/index.html.twig',[
-            'email' => $this->getUser()->getEmail(),
-        ]);
+
+        if($this->getUser())
+            return $this->render('User/index.html.twig',[
+                'email' => $this->getUser()->getEmail(),
+            ]);
+
+        return $this->redirectToRoute('app_login');
     }
 
     private function checkPasswordContent(string $password): bool
@@ -87,6 +99,9 @@ class HomeController extends AbstractController
                                     MailerController $mail,
                                     MailerInterface $mailer): Response
     {
+        if($this->getUser() == null)
+            return $this->redirectToRoute("app_login");
+
         $Password = null;
 
         $passwordForm = $this->createFormBuilder($Password)

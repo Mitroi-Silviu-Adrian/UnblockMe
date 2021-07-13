@@ -16,7 +16,12 @@ class LicensePlatesController extends AbstractController
     #[Route('/', name: 'license_plates_index', methods: ['GET'])]
     public function index(): Response
     {
-        $licensePlatesRepository = $this->getUser()->getLicensePlates();
+        $user =$this->getUser();
+
+        if($user==null)
+            return $this->redirectToRoute("app_login");
+
+        $licensePlatesRepository = $user->getLicensePlates();
 
         return $this->render('license_plates/index.html.twig', [
             'license_plates' => $licensePlatesRepository,

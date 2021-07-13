@@ -8,25 +8,39 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Activities ✅</h1>
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Blocker Plate</th>
-            <th>Blockee Plate</th>
+<div class="text-center" style="max-width: 480px;margin:auto">
+    <h1 class="mt-4 border" style="color: red">
+        Ongoing Activities
+    </h1>
+    <table class="table table-hover table-striped table-border" style="max-width: 400px;margin:auto; font-family: 'Roboto Light', sans-serif;">
+        <thead class="border">
+        <tr class="text-center" style=" color: gold">
+            <th class="fs-3">Blocker</th>
+            <th class="fs-3">Blockee </th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         {% if  activeActivities %}
             {% for activity in activeActivities %}
-            <tr>
-                <td>{{ activity.blocker }}</td>
-                <td>{{ activity.blockee }}</td>
-                <td><a href="{{ path('deleteActivity', {'status': activity.status}) }}">Remove</a></td>
-                <td><a href="{{ path('contact', {'status': activity.status}) }}">Contact</a></td>
-            </tr>
+                <tr class="text-center" style=" color: orange">
+                    <td class="align-middle fs-3">{{ activity.blocker }}</td>
+
+                    <td class="align-middle fs-3">{{ activity.blockee }}</td>
+
+                    <td>
+                        <a href="{{ path('contact', {'status': activity.status}) }}">
+                            <button class="btn btn-outline-success w-auto h-auto fs-7 mb-3" type="button" style="max-block-size: 100%">
+                                Contact
+                            </button>
+                        </a>
+                        <br>
+                        <a href="{{ path('deleteActivity', {'status': activity.status}) }}">
+                            <button class="btn btn-outline-danger w-auto h-auto fs-7 " type="button" style="max-block-size: 100%">
+                                Remove
+                            </button>
+                        </a></td>
+                </tr>
             {% endfor %}
 
         {% else %}
@@ -34,19 +48,32 @@
                 <td colspan="3">no records found</td>
             </tr>
         {% endif %}
+
         </tbody>
+
+        <tfoot>
+            <tr>
+                <th class="fs-3" style = "color: red">
+                    Report
+                </th>
+                <
+                <td>
+                    <a href="{{ path('reportActivity', {'type': 'blockee'})}}">
+                        <button class="btn btn-outline-danger w-auto h-auto fs-7 " type="button" style="max-block-size: 100%">
+                            I was blocked
+                        </button>
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('reportActivity', {'type': 'blocker'})}}">
+                        <button class="btn btn-outline-danger w-auto h-auto fs-7 " type="button" style="max-block-size: 100%">
+                            I blocked
+                        </button>
+                    </a>
+                </td>
+            </tr>
+        </tfoot>
     </table>
 
-
-    <h1>Do you have something to report? ✅</h1>
-
-    What do you report?:
-    <ul>
-        <li><a href="{{ path('reportActivity', {'type': 'blockee'})}}">I was blocked</a></li>
-        <li><a href="{{ path('reportActivity', {'type': 'blocker'})}}">I blocked </a></li>
-    </ul>
 </div>
-
-    <br>
-    <a href="{{ path('home') }}">Back to Home</a>
 {% endblock %}

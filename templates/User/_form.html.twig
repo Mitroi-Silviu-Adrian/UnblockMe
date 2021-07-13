@@ -1,4 +1,22 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    <div class = "border text-center mt-5" style="max-width: 480px;margin: auto; color: orange; border-spacing: 5px">
+        <h1 class="mt-3 mb-3"> Register</h1>
+        <div class="fs-3 m-3">
+
+            {{ form_label(form.email, null, {
+                'label': 'Email:',
+                'label_attr':{
+                    'class': 'fs-3'
+                }
+            }) }}
+            {{ form_widget(form.email) }}
+            {{ form_help(form.email) }}
+
+            <p class="mt-3 fs-5" style="color: red">The password will be generated automatically and send to your email</p>
+        </div>
+
+        <button class="btn btn-warning btn-blk">{{ button_label|default('Save') }}</button>
+    </div>
+
 {{ form_end(form) }}

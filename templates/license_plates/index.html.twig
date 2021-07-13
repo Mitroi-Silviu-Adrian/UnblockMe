@@ -3,35 +3,48 @@
 {% block title %}My Cars{% endblock %}
 
 {% block body %}
-    <h1> My Cars</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>License Plate</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for license_plate in license_plates %}
-            <tr>
-                <td>{{ license_plate.id }}</td>
-                <td>{{ license_plate.licensePlate }}</td>
-                <td>
-                    <a href="{{ path('license_plates_show', {'id': license_plate.id}) }}">show</a>
-                    <a href="{{ path('license_plates_edit', {'id': license_plate.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="text-center mt-5">
+        <table class="table table-hover table-striped table-border border-danger" style="max-width: 500px;margin:auto; font-family: 'Roboto Light', sans-serif;">
+            <thead class="border" >
+            <td colspan="2" style="font-family: 'Roboto Light', sans-serif;">
+                <h1 style="color: gold">License Plates</h1>
+            </td>
+            </thead>
+            <tbody>
+            {% for license_plate in license_plates %}
+                <tr class="align-bottom" style="color: orange">
+                    <td class="align-middle">
+                        <p class="text-center mt-1 fs-4 w-auto h-auto" >{{ license_plate.licensePlate }}</p>
+                    </td>
+                    <td class="align-middle">
+                        <a href="{{ path('license_plates_edit', {'id': license_plate.id}) }}">
+                            <button class="btn btn-outline-warning w-auto h-auto " type="button" style="max-block-size: 100%">
+                                Edit
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
 
-    <a href="{{ path('license_plates_new') }}">Add new car</a>
-    <br>
-    <a href="{{ path('home') }}">Back to Home</a>
+            <tfoot>
+            <td colspan="2">
+                <a href="{{ path('license_plates_new') }}">
+                    <button class="btn btn-warning w-auto h-auto fs-7" type="submit">
+                        Add Car
+                    </button>
+                </a>
+
+            </td>
+            </tfoot>
+        </table>
+
+    </div>
+
+
 {% endblock %}

@@ -25,7 +25,12 @@ class ActivityController extends AbstractController
     #[Route('/activity', name: 'activity')]
     public function index(ActivityRepository $activityRepository): Response
     {
-        $licensePlates = $this->getUser()->getLicensePlates();
+        $user =$this->getUser();
+
+        if($user == null)
+            return $this->redirectToRoute('app_login');
+
+        $licensePlates = $user->getLicensePlates();
 
         $activities = array();
 
