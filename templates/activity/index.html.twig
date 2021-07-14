@@ -29,13 +29,13 @@
                     <td class="align-middle fs-3">{{ activity.blockee }}</td>
 
                     <td>
-                        <a href="{{ path('contact', {'status': activity.status}) }}">
+                        <a href="{{ path('contact', {'blocker': activity.blocker, 'blockee': activity.blockee}) }}">
                             <button class="btn btn-outline-success w-auto h-auto fs-7 mb-3" type="button" style="max-block-size: 100%">
                                 Contact
                             </button>
                         </a>
                         <br>
-                        <a href="{{ path('deleteActivity', {'status': activity.status}) }}">
+                        <a href="{{ path('deleteActivity', {'blocker': activity.blocker, 'blockee': activity.blockee}) }}">
                             <button class="btn btn-outline-danger w-auto h-auto fs-7 " type="button" style="max-block-size: 100%">
                                 Remove
                             </button>

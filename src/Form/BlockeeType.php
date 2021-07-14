@@ -72,7 +72,7 @@ class BlockeeType extends AbstractType
         $builder
             ->add('blocker')
             ->add('blockee',ChoiceType::class,$formOptions)
-            ->add('Report', SubmitType::class)
+            ->add('Report', SubmitType::class,$submitOptions)
         ;
 
     }

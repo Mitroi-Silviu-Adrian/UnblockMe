@@ -5,9 +5,9 @@
 {% block body %}
 
     <div class="text-center mt-5">
-        <table class="table table-hover table-striped table-border border-danger" style="max-width: 500px;margin:auto; font-family: 'Roboto Light', sans-serif;">
+        <table class="table table-hover table-striped table-border border-danger" style="max-width: 400px;margin:auto; font-family: 'Roboto Light', sans-serif;">
             <thead class="border" >
-            <td colspan="2" style="font-family: 'Roboto Light', sans-serif;">
+            <td colspan="3" style="font-family: 'Roboto Light', sans-serif;">
                 <h1 style="color: gold">License Plates</h1>
             </td>
             </thead>
@@ -19,21 +19,27 @@
                     </td>
                     <td class="align-middle">
                         <a href="{{ path('license_plates_edit', {'id': license_plate.id}) }}">
-                            <button class="btn btn-outline-warning w-auto h-auto " type="button" style="max-block-size: 100%">
+                            <button class="btn btn-outline-warning btn-block  " type="button" style="max-block-size: 100%">
                                 Edit
+                            </button>
+                        </a>
+
+                        <a href="{{ path('license_plates_delete', {'id': license_plate.id}) }}">
+                            <button class="btn btn-outline-danger btn-block " type="button" style="max-block-size: 100%">
+                                Delete
                             </button>
                         </a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="2">No records found</td>
+                    <td colspan="3">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>
 
             <tfoot>
-            <td colspan="2">
+            <td colspan="3">
                 <a href="{{ path('license_plates_new') }}">
                     <button class="btn btn-warning w-auto h-auto fs-7" type="submit">
                         Add Car

@@ -45,7 +45,7 @@ class MailerController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
 
-    #[Route('/messageForm{from}/{to}', name: 'messageForm')]
+    #[Route('/messageFrom/{from}/to/{to}', name: 'messageForm')]
     public function messageForm(Request $request,
                                 MailerInterface $mailer,
                                 string $from,
@@ -80,7 +80,7 @@ class MailerController extends AbstractController
                 $mailer->send($email);
             }
 
-            //$this->addFlash($to,$message);
+            $this->addFlash('notice', 'The message was sent');
 
             return $this->redirectToRoute('activity');
         }

@@ -19,28 +19,23 @@ class ActivityRepository extends ServiceEntityRepository
         parent::__construct($registry, Activity::class);
     }
 
-    /**
-     * @return Activity|null Returns Activity object
-     */
-    public function findByBlocker(string $licensePlate): ?Activity
+
+    public function findByBlocker(string $licensePlate): ?array
     {
         return $this->createQueryBuilder('l')
             ->andWhere('l.blocker = :val')
             ->setParameter('val', $licensePlate)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->execute()
             ;
     }
-    /**
-     * @return Activity|null Returns Activity object
-     */
-    public function findByBlockee(string $licensePlate): ?Activity
+    public function findByBlockee(string $licensePlate): ?array
     {
         return $this->createQueryBuilder('l')
             ->andWhere('l.blockee = :val')
             ->setParameter('val', $licensePlate)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->execute()
             ;
     }
 

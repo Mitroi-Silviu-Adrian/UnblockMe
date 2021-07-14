@@ -41,13 +41,18 @@ class ActivityController extends AbstractController
             $result = $activityRepository->findByBlocker($planeLP);
 
             if($result)
-                array_push($activities,$result);
+            {
+                foreach ($result as $res)
+                    array_push($activities,$res);
+            }
 
             $result = $activityRepository->findByBlockee($planeLP);
 
             if($result)
-                array_push($activities,$result);
-
+            {
+                foreach ($result as $res)
+                    array_push($activities,$res);
+            }
         }
 
         return $this->render('activity/index.html.twig', [
@@ -123,7 +128,7 @@ class ActivityController extends AbstractController
             'type' => $type,
         ]);
     }
-    #[Route('/deleteActivity/{status}', name: 'deleteActivity', methods: ['GET', 'POST'])]
+    #[Route('/deleteActivity/{blocker}/{blockee}', name: 'deleteActivity', methods: ['GET', 'POST'])]
     public function delete(Request $request, Activity $activity): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
@@ -133,7 +138,7 @@ class ActivityController extends AbstractController
         return $this->redirectToRoute('activity');
     }
 
-    #[Route('/contact/{status}', name: 'contact', methods: ['GET', 'POST'])]
+    #[Route('/contact/{blocker}/{blockee}', name: 'contact', methods: ['GET', 'POST'])]
     public function contact(Request $request, Activity $activity): Response
     {
         $blockerLP = $activity->getBlocker();
@@ -156,24 +161,27 @@ class ActivityController extends AbstractController
         $from = $this->getUser()->getEmail();
 
         if($isBlocker == true)
-            $to = $this->getDoctrine()
+            $user = $this->getDoctrine()
                 ->getRepository(LicensePlates::class)
                 ->findByLicensePlate($blockeeLP)
                 ->getUserId()
-                ->getEmail()
             ;
         else
-            $to = $this->getDoctrine()
+            $user = $this->getDoctrine()
                 ->getRepository(LicensePlates::class)
                 ->findByLicensePlate($blockerLP)
                 ->getUserId()
-                ->getEmail()
             ;
-        //var_dump($to,$from, $isBlocker); die;
-        return $this->redirectToRoute('messageForm', [
-            'from' => $from,
-            'to' => $to,
-        ]);
+
+        if($user != null)
+        {
+            return $this->redirectToRoute('messageForm', [
+                'from' => $from,
+                'to' => $user->getEmail(),
+            ]);
+        }
+        $this->addFlash('notice', "There is still no user, who claims the car.");
+        return $this->redirectToRoute('activity');
     }
 
 }

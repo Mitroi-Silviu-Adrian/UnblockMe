@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Activity;
 use App\Entity\LicensePlates;
 use App\Form\LicensePlatesType;
 use App\Repository\LicensePlatesRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -99,9 +102,28 @@ class LicensePlatesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'license_plates_edit', methods: ['GET', 'POST'])]
+    private function actingCars(string $plainLP, ObjectManager $objectManager): bool
+    {
+        $activities = $objectManager->getRepository(Activity::class)->findByBlocker($plainLP);
+        if(count($activities) > 0)
+            return true;
+
+
+        $activities = $objectManager->getRepository(Activity::class)->findByBlockee($plainLP);
+        if(count($activities) > 0)
+            return true;
+
+        return false;
+    }
+
+    #[Route('/edit/{id}', name: 'license_plates_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, LicensePlates $licensePlate): Response
     {
+        if($this->actingCars($licensePlate->getLicensePlate(),$this->getDoctrine()->getManager()) == true)
+        {
+            $this->addFlash('notice','The car cannot be edited as is involved in an activity.');
+            return $this->redirectToRoute('license_plates_index');
+        }
         $form = $this->createForm(LicensePlatesType::class, $licensePlate);
         $form->handleRequest($request);
 
@@ -117,14 +139,19 @@ class LicensePlatesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'license_plates_delete', methods: ['POST'])]
+    #[Route('/deleteCar/{id}', name: 'license_plates_delete', methods: ['GET','POST'])]
     public function delete(Request $request, LicensePlates $licensePlate): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$licensePlate->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($licensePlate);
-            $entityManager->flush();
+        $objectManager = $this->getDoctrine()->getManager();
+
+        if($this->actingCars($licensePlate->getLicensePlate(), $objectManager) == true)
+        {
+            $this->addFlash( 'notice','The car cannot be deleted because is involved in a activity');
+            return $this->redirectToRoute('license_plates_index');
         }
+
+        $objectManager->remove($licensePlate);
+        $objectManager->flush();
 
         return $this->redirectToRoute('license_plates_index');
     }
