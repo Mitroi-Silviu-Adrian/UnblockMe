@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Activity;
+use App\Entity\User;
 use App\Form\MessageType;
 use Doctrine\DBAL\Types\StringType;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -14,6 +15,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Message;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class MailerController extends AbstractController
 {
@@ -45,7 +47,38 @@ class MailerController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
 
-    //#[Route('/messageFrom/{from}/to/{to}', name: 'messageForm')]
+    #[Route('/messageFrom/{from}/to/{to}', name: 'messageForm')]
+    public function messageForm(Request $request,
+                                MailerInterface $mailer,
+                                User $from,
+                                User $to): Response
+    {
+        $message = null;
+
+        $form = $this->createForm(MessageType::class,$message);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $message = current($form->getData());
+            if($to != "null") {
+                self::sendMessage($mailer,$from->getEmail(),$to->getEmail(),$message);
+            }
+            $this->addFlash('notice', 'The message was sent');
+
+            return $this->redirectToRoute('activity');
+        }
+        return $this->render('mailer/new.html.twig',[
+            'form' => $form->createView(),
+            'from' => $from,
+            'to' => $to,
+        ]);
+
+
+    }
+
+
+
     static function sendMessage(
                                 MailerInterface $mailer,
                                 string $from,

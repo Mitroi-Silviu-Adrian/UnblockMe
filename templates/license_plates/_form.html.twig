@@ -1,4 +1,28 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<div class = "border text-center mt-5" style="max-width: 480px;margin: auto; color: orange; border-spacing: 5px">
+    <h1 class="m-3"> {{ title }}</h1>
+    <br><br>
+
+    <div class="form-control form-lg" style="color: orange; border: orangered">
+        <label class="form-label">
+            {{ form_label(form.license_plate, null, {
+                'label': 'License Plate',
+                'label_attr':{
+                    'class': 'fs-3',
+                }
+            }) }}
+        </label>
+        <br>
+        {{ form_widget(form.license_plate) }}
+        <br><br>
+        {{ form_widget(form.Save,{
+            'attr':{
+                'class': 'btn-outline-warning btn-lg',
+            }
+        }) }}
+
+    </div>
+
+</div>
+
 {{ form_end(form) }}

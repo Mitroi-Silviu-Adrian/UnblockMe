@@ -161,8 +161,6 @@ class ActivityController extends AbstractController
                 break;
         }
 
-        $from = $this->getUser()->getEmail();
-
         if($isBlocker == true)
             $user = $this->getDoctrine()
                 ->getRepository(LicensePlates::class)
@@ -177,10 +175,9 @@ class ActivityController extends AbstractController
             ;
 
         if($user != null)
-        {
-            return $this->redirectToRoute('messageForm', [
-                'from' => $from,
-                'to' => $user->getEmail(),
+        {return $this->redirectToRoute('messageForm', [
+                'from' => $this->getUser()->getID(),
+                'to' => $user->getID(),
             ]);
         }
         $this->addFlash('notice', "There is still no user, who claims the car.");

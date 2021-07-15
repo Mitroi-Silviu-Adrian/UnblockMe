@@ -1,4 +1,41 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
 
+<div class = "border text-center mt-5" style="max-width: 480px;margin: auto; color: orange; border-spacing: 5px">
+    <h1 class="m-3"> Report Activity</h1>
+    <br><br>
+
+        <div class="form-control form-lg" style="color: orange; border: orangered">
+            <label class="form-label">
+                {{ form_label(form.blocker, null, {
+                    'label': 'Blocker:',
+                    'label_attr':{
+                        'class': 'fs-3',
+                    }
+                }) }}
+            </label>
+            {{ form_widget(form.blocker) }}
+            <br>
+            <label class="form-label label-lg">
+                {{ form_label(form.blockee, null, {
+                    'label': 'Blockee:',
+                    'label_attr':{
+                        'class': 'fs-3',
+                    }
+                }) }}
+            </label>
+
+            {{ form_widget(form.blockee,{'attr':{
+                'class': 'form-select-sm',
+
+            }}) }}
+
+            <br>
+
+            {{ form_widget(form.Message) }}
+        </div>
+
+
+        {{ form_widget(form) }}
+
+</div>
 {{ form_end(form) }}

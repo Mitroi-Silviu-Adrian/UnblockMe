@@ -7,10 +7,38 @@
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
+<div class="example-wrapper
+            card
+            d-flex justify-content-center
+            border border-warning border-3
+            rounded rounded-3
+            mt-4 "
 
-<div class="example-wrapper">
+     style="
+     background-color: navajowhite;
+     max-width: 480px;
+     margin:auto";
+>
 
-
+    <div class="text-center m-4 border border-warning bg-light">
+        <h2 style="color: orange"> Hello {{ current_user }} </h2>
+    </div>
+    <div class="m-4 border-warning border-top">
+        <p class="m-2">
+            <h5 class="text-center bg-light text-danger">Welcome to UnBlockME</h5>
+            <br><br>
+            <h6 class="text-white fs-3"> <b>Add your cars </b></h6>
+            You can add your car to our data base, so that the moment someone wants to get in touch, he can find you
+            here, by just entering the license plate of your car.<br>
+            So go ahead to <b>MyCars</b> section to add, edit or even remove your car.
+        
+            <br><br>
+            <h6 class="text-white fs-3"> <b>Report and Contact </b></h6>
+                Go to <b>Activities</b> to see the current reported activities in which, at least one
+            of your cars, is implicated. Solve or report an activity, contact the owners, and hope they are as smart as
+            you to be part of this community.
+        </p>
+    </div>
 </div>
 
 {% endblock %}

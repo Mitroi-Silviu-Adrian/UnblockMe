@@ -3,11 +3,6 @@
 {% block title %}New LicensePlates{% endblock %}
 
 {% block body %}
-    <h1>Create new LicensePlates</h1>
+    {{ include('license_plates/_form.html.twig',{'title': 'New Car'}) }}
 
-    {{ include('license_plates/_form.html.twig') }}
-
-    <a href="{{ path('license_plates_index') }}">Back to MyCars</a>
-    <br>
-    <a href="{{ path('home') }}">Back to Home</a>
 {% endblock %}

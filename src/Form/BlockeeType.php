@@ -107,7 +107,7 @@ class BlockeeType extends AbstractType
 
             //dd($form);
             $blockerLP = $form->getData();
-            dd($blockerLP);
+            //dd($blockerLP);
             $licensePlate = $this->licensePlatesRepository->findByLicensePlate(LicensePlatesController::formatLP($blockerLP));
             //dd($licensePlate);
             if($licensePlate) {
