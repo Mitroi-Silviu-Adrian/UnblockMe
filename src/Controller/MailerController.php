@@ -45,50 +45,29 @@ class MailerController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
 
-    #[Route('/messageFrom/{from}/to/{to}', name: 'messageForm')]
-    public function messageForm(Request $request,
+    //#[Route('/messageFrom/{from}/to/{to}', name: 'messageForm')]
+    static function sendMessage(
                                 MailerInterface $mailer,
                                 string $from,
-                                string $to): Response
+                                string $to,
+                                string $mess)
     {
-        $message = null;
-
-        $form = $this->createForm(MessageType::class,$message);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid())
-        {
-            $message = current($form->getData());
-
             //echo $this->message;
+        $email = (new TemplatedEmail())
+            ->from($from)
+            ->to($to)
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('UnBlockMe Notification')
+            ->htmlTemplate('mailer/notification.html.twig')
+            ->context([
+                'text' => $mess,
+                'from' => $from,
+            ]);
 
-            if($to != "null") {
-                $email = (new TemplatedEmail())
-                    ->from($from)
-                    ->to($to)
-                    //->cc('cc@example.com')
-                    //->bcc('bcc@example.com')
-                    //->replyTo('fabien@example.com')
-                    //->priority(Email::PRIORITY_HIGH)
-                    ->subject('UnBlockMe Notification')
-                    ->htmlTemplate('mailer/notification.html.twig')
-                    ->context([
-                        'text' => $message,
-                        'from' => $from,
-                    ]);
-
-                $mailer->send($email);
-            }
-
-            $this->addFlash('notice', 'The message was sent');
-
-            return $this->redirectToRoute('activity');
-        }
-        return $this->render('mailer/new.html.twig',[
-            'form' => $form->createView(),
-            'from' => $from,
-            'to' => $to,
-        ]);
+        $mailer->send($email);
     }
 
 }

@@ -13,13 +13,12 @@ class MessageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('message', TextareaType::class,[
+            ->add('message', TextareaType::class, [
                 'attr' => [
                     'placeholder' => 'Enter your  message',
                 ]
             ])
-            ->add('Send', SubmitType::class)
-        ;
+            ->add('Send', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

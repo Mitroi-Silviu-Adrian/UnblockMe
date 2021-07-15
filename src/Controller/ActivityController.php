@@ -8,6 +8,7 @@ use App\Form\BlockerType;
 use App\Repository\ActivityRepository;
 use App\Form\ActivityType;
 use Doctrine\DBAL\Types\TextType;
+use http\Message;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -63,7 +64,7 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/reportActivity/{type}', name: 'reportActivity', methods: ['GET', 'POST'])]
-    public function new(Request $request, string $type): Response
+    public function reportActivity(Request $request, MailerInterface $mailer , string $type): Response
     {
         $activity = new Activity();
 
@@ -74,15 +75,24 @@ class ActivityController extends AbstractController
             $form = $this->createForm(BlockeeType::class,$activity);
 
         $form->handleRequest($request);
-
+        //dd($form);
         if($form->isSubmitted() && $form->isValid()) {
-            $activity->setBlockee($form->get('blockee')->getData());
-            $activity->setBlocker($form->get('blocker')->getData());
+            //dd($form->get('Message')->getData());
+            $otherUserEmail = $form->get('email')->getData();
 
-            $activity->setBlocker(LicensePlatesController::formatLP($activity->getBlocker()));
-            $activity->setBlockee(LicensePlatesController::formatLP($activity->getBlockee()));
-
+            //dd($otherUserEmail);
             //var_dump($activity);die;
+
+
+            if($type == 'blocker')
+                $plainLicensePlate = $activity->getBlockee();
+            else
+                $plainLicensePlate = $activity->getBlocker();
+
+            $this->addFlash('notice','The Activity was reported!');
+
+            $activity->setBlocker(LicensePlatesController::formatLP($form->get('blocker')->getData()));
+            $activity->setBlockee(LicensePlatesController::formatLP($form->get('blockee')->getData()));
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -91,34 +101,27 @@ class ActivityController extends AbstractController
             $entityManager->persist($activity);
             $entityManager->flush();
 
-            //$this->addFlash('notice','The Activity was reported!');
+            if($otherUserEmail) {
+                $message = $form->get('Message')->getData();
 
-            $currentUserEmail= $this->getUser()->getEmail();
-
-            if($type == 'blocker')
-                $plainLicensePlate = $activity->getBlockee();
-            else
-                $plainLicensePlate = $activity->getBlocker();
-
-            $licensePlate = $this->getDoctrine()
-                ->getRepository(LicensePlates::class)
-                ->findByLicensePlate($plainLicensePlate);
-
-            if($licensePlate) {
-                $otherUserEmail = $licensePlate->getUserId()->getEmail();
-                return $this->redirectToRoute('messageForm', [
-                    'from' => $currentUserEmail,
-                    'to' => $otherUserEmail,
-                ]);
+                $this->addFlash('notice', 'The message was sent');
+                MailerController::sendMessage($mailer,$this->getUser()->getEmail(),$otherUserEmail,$message);
             }
-            $this->addFlash('error','The owner of the car you reported, is not registered.');
-            $this->addFlash('error','We will let you know, if the user registers meanwhile');
+            else
+            {
 
-            $licensePlate = new LicensePlates();
-            $licensePlate->setLicensePlate($plainLicensePlate);
+                    $licensePlate = new LicensePlates();
+                    $licensePlate->setLicensePlate(LicensePlatesController::formatLP($plainLicensePlate));
 
-            $entityManager->persist($licensePlate);
-            $entityManager->flush();
+                    $this->addFlash('notice', 'The car reported has no registered owner');
+
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($licensePlate);
+                    $entityManager->flush();
+
+            }
+            return $this->redirectToRoute('activity');
+
         }
 
         //echo $licensePlates->getLicensePlate();
