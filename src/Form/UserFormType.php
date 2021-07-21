@@ -12,7 +12,34 @@ class UserFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email')
+            ->add('email',null,[
+                'label' => 'Email',
+                'attr' => [
+                    'class' => 'fs-6',
+                    'placeholder' => "Enter your email ...",
+                    'autocomplete' => 'off',
+                    'style' => '
+                        width: 250px;
+                        height: 40px;
+                        color: orange;
+                        text-align: center
+                    ',
+                ],
+            ])
+            ->add('username',null,[
+                'label' => 'Username',
+                'attr' => [
+                    'class' => 'fs-6',
+                    'placeholder' => "Enter your username ...",
+                    'autocomplete' => 'off',
+                    'style' => '
+                        width: 250px;
+                        height: 40px;
+                        color: orange;
+                        text-align: center
+                        ',
+                ],
+            ])
             //->add('password')
         ;
     }

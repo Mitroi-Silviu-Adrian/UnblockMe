@@ -42,6 +42,11 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
      */
     private $licensePlates;
 
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $username;
+
     public function __construct()
     {
         $this->licensePlates = new ArrayCollection();
@@ -74,13 +79,6 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return (string) $this->email;
     }
 
-    /**
-     * @deprecated since Symfony 5.3, use getUserIdentifier instead
-     */
-    public function getUsername(): string
-    {
-        return (string) $this->email;
-    }
 
     /**
      * @see UserInterface
@@ -162,6 +160,18 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
                 $licensePlate->setUserId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUsername(): string
+    {
+        return (string) $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
 
         return $this;
     }

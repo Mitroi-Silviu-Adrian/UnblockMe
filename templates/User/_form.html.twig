@@ -1,19 +1,28 @@
 {{ form_start(form) }}
 
-    <div class = "border text-center mt-5" style="max-width: 480px;margin: auto; color: orange; border-spacing: 5px">
+    <div class = "border border-warning text-center mt-5" style="max-width: 480px;margin: auto; color: orange; border-spacing: 5px">
         <h1 class="mt-3 mb-3"> Register</h1>
         <div class="fs-3 m-3">
 
-            {{ form_label(form.email, null, {
-                'label': 'Email:',
-                'label_attr':{
-                    'class': 'fs-3'
-                }
-            }) }}
-            {{ form_widget(form.email) }}
-            {{ form_help(form.email) }}
+            <div class="border border-warning m-3">
+                {{ form_label(form.username) }}
+                <div class="m-3">
+                    {{ form_widget(form.username) }}
+                </div>
+                {{ form_help(form.username) }}
+            </div>
 
-            <p class="mt-3 fs-5" style="color: red">The password will be generated automatically and send to your email</p>
+            <div class="border border-warning m-3">
+                {{ form_label(form.email) }}
+
+                <div class="m-3">
+                    {{ form_widget(form.email) }}
+                </div>
+
+                {{ form_help(form.email) }}
+            </div>
+
+            <p class="m-3 fs-5" style="color: red">The password will be generated automatically and send to your email</p>
         </div>
 
         <button class="btn btn-warning btn-blk">{{ button_label|default('Save') }}</button>

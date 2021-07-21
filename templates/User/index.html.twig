@@ -3,19 +3,48 @@
 {% block title %}Profile{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Email: {{ email }} ✅</h1>
+    <div class="align-center mt-5">
 
-    <a href="{{ path('changePassword') }}">Change password</a>
-    <br>
-    <a href="{{ path('home') }}">Back to home</a>
-    <br>
+        <ul class="list-group border border-success" style="max-width: 400px;margin:auto; font-family: 'Roboto Light', sans-serif;">
+            <h1 class="text-center m-3 border-bottom border-warning" style="color: green">
+                Account Details
+            </h1>
 
-</div>
+            <li class = "list-group-item border-2 border-warning m-3 text-left" style="color: orange">
+                <div class="border-bottom fs-2">
+                    Username
+                </div>
+                <div class="m-3 fs-4">
+                    {{ username }}
+
+                    <a class = "btn btn-lg btn-outline-success btn-block m-1" href="{{ path('editUsername') }}">
+                        Edit
+                    </a>
+                </div>
+
+            </li>
+            <li class = "list-group-item border-2 border-warning m-3 text-left" style="color: orange">
+                <div class="border-bottom fs-2">
+                    Email
+                </div>
+                <div class="m-3 fs-4">
+                    {{ email }}
+                </div>
+
+            </li>
+
+            <li class = "list-group-items m-3 text-center" style="color: orange">
+                <div class="border-bottom fs-2">
+                    <a class="btn btn-lg btn-outline-warning btn-block m-2" href="{{ path('changePassword') }}">
+                        Change Password
+                    </a>
+                </div>
+            </li>
+
+        </ul>
+
+    </div>
+
 
 {% endblock %}
