@@ -35,9 +35,13 @@ class ActivityController extends AbstractController
 
         $activities = array();
 
+        $plainLicencePlates = array();
+
         foreach($licensePlates as $licensePlate)
         {
             $planeLP = $licensePlate->getLicensePlate();
+
+            array_push($plainLicencePlates,$planeLP);
 
             $result = $activityRepository->findByBlocker($planeLP);
 
@@ -58,7 +62,7 @@ class ActivityController extends AbstractController
 
         return $this->render('activity/index.html.twig', [
             'controller_name' => 'ActivityController',
-            'activityRepository' => $activityRepository->findAll(),
+            'ownerLPs' => $plainLicencePlates,
             'activeActivities' => $activities,
         ]);
     }

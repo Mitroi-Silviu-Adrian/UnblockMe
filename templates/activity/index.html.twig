@@ -3,10 +3,6 @@
 {% block title %}Report Activity{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
 <div class="text-center" style="max-width: 480px;margin:auto">
     <h1 class="mt-4 border" style="color: red">
@@ -34,12 +30,31 @@
                                 Contact
                             </button>
                         </a>
+
+                        {% if ownerLPs %}
+                            {% set break = false %}
+                            {% for licencePlate in ownerLPs|filter(licencePlate => not break)%}
+                                {% if licencePlate == activity.blocker %}
+
+                                        <button class="btn btn-secondary w-auto h-auto fs-7 " disabled type="button" style="max-block-size: 100%">
+                                            Remove
+                                        </button>
+
+                                    {% set break = true %}
+                                {% elseif licencePlate == activity.blockee %}
+                                    <a href="{{ path('deleteActivity', {'blocker': activity.blocker, 'blockee': activity.blockee}) }}">
+                                        <button class="btn btn-outline-danger w-auto h-auto fs-7 " type="button" style="max-block-size: 100%">
+                                            Remove
+                                        </button>
+                                    </a>
+                                    {% set break = true %}
+                                {% endif %}
+
+                            {% endfor %}
+                        {% endif %}
+
                         <br>
-                        <a href="{{ path('deleteActivity', {'blocker': activity.blocker, 'blockee': activity.blockee}) }}">
-                            <button class="btn btn-outline-danger w-auto h-auto fs-7 " type="button" style="max-block-size: 100%">
-                                Remove
-                            </button>
-                        </a></td>
+                    </td>
                 </tr>
             {% endfor %}
 
